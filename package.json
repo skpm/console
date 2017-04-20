@@ -1,0 +1,28 @@
+{
+  "name": "sketch-module-console-polyfill",
+  "version": "0.1.0",
+  "description": "A console polyfill for sketch",
+  "main": "lib/index.js",
+  "devDependencies": {
+    "standard": "^8.6.0"
+  },
+  "scripts": {
+    "test": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sketch-pm/sketch-module-console-polyfill.git"
+  },
+  "keywords": [
+    "sketch",
+    "module",
+    "console",
+    "polyfill"
+  ],
+  "author": "Mathieu Dutour <mathieu@dutour.me> (http://mathieu.dutour.me/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sketch-pm/sketch-module-console-polyfill/issues"
+  },
+  "homepage": "https://github.com/sketch-pm/sketch-module-console-polyfill#readme"
+}
