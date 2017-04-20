@@ -1,6 +1,6 @@
 # sketch-module-console-polyfill
 
-A [console](https://developer.mozilla.org/en-US/docs/Web/API/Console) polyfill for sketch).
+A [console](https://developer.mozilla.org/en-US/docs/Web/API/Console) polyfill for sketch.
 
 ## Installation
 
