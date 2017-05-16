@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sketch-pm/sketch-module-console-polyfill.git"
+    "url": "git+https://github.com/skpm/sketch-module-console-polyfill.git"
   },
   "keywords": [
     "sketch",
@@ -22,7 +22,7 @@
   "author": "Mathieu Dutour <mathieu@dutour.me> (http://mathieu.dutour.me/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sketch-pm/sketch-module-console-polyfill/issues"
+    "url": "https://github.com/skpm/sketch-module-console-polyfill/issues"
   },
-  "homepage": "https://github.com/sketch-pm/sketch-module-console-polyfill#readme"
+  "homepage": "https://github.com/skpm/sketch-module-console-polyfill#readme"
 }
