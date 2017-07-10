@@ -1,4 +1,4 @@
-# sketch-module-console-polyfill
+# sketch-polyfill-console
 
 A [console](https://developer.mozilla.org/en-US/docs/Web/API/Console) polyfill for sketch. It is automatically included (when needed) when using [skpm](https://github.com/skpm/skpm).
 
