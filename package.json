@@ -1,6 +1,6 @@
 {
   "name": "sketch-polyfill-console",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A console polyfill for sketch",
   "main": "lib/index.js",
   "devDependencies": {
@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/skpm/sketch-polyfill-console/issues"
   },
-  "homepage": "https://github.com/skpm/sketch-polyfill-console#readme"
+  "homepage": "https://github.com/skpm/sketch-polyfill-console#readme",
+  "dependencies": {
+    "@skpm/sketch-debugger": "^0.1.1"
+  }
 }
