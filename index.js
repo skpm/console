@@ -158,7 +158,7 @@ if (!console._sketch) {
 
     var duration = Date.now() - timers[label]
     delete timers[label]
-    return logEverywhere('log', [label + ': ' + (duration / 1000) + 'ms'])
+    return logEverywhere('log', [label + ': ' + duration + 'ms'])
   }
 
   // console.trace = function() {}
