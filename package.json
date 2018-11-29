@@ -1,6 +1,6 @@
 {
   "name": "@skpm/console",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "A console polyfill for sketch",
   "main": "index.js",
   "devDependencies": {
