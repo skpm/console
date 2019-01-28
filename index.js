@@ -3,7 +3,7 @@
 var util = require('util')
 
 var indentLevel = 0
-function indentString(string) {
+function indentString (string) {
   var indent = ''
   for (var i = 0; i < indentLevel; i++) {
     indent += '  '
@@ -15,7 +15,7 @@ function indentString(string) {
   return string.replace(/\n/g, indent + '\n')
 }
 
-function logEverywhere(level, payload) {
+function logEverywhere (level, payload) {
   var stringValue = util.format.apply(this, payload)
 
   log({
@@ -28,21 +28,44 @@ function logEverywhere(level, payload) {
 
 if (!console._sketch) {
   var oldAssert = console.assert
-  console.assert = function(condition, text) {
+  console.assert = function (condition, text) {
     // log to the JS context
     oldAssert && oldAssert.apply(this, arguments)
+
     if (!condition) {
       return logEverywhere('assert', [text])
     }
     return undefined
   }
 
-  // console.clear = function() {}
+  var oldClear = console.clear
+  console.clear = function () {
+    oldClear && oldClear.apply(this, arguments)
+
+    var threadDictionary = NSThread.mainThread().threadDictionary()
+    var panel = threadDictionary['skpm.debugger']
+    if (!panel) {
+      return
+    }
+
+    var webview = panel.contentView().subviews()[0]
+    if (webview || !webview.evaluateJavaScript_completionHandler) {
+      return
+    }
+
+    var fiber = coscript.createFiber()
+    webview.evaluateJavaScript_completionHandler(
+      'sketchBridge("{\\"name\\":\\"logs/CLEAR_LOGS\\"}");',
+      __mocha__.createBlock_function('v28@?0@8c16@"NSError"20', function (result, err) {
+        fiber.cleanup()
+      })
+    )
+  }
 
   var counts = {}
 
   var oldCount = console.count
-  console.count = function(label) {
+  console.count = function (label) {
     // log to the JS context
     oldCount && oldCount.apply(this, arguments)
 
@@ -53,7 +76,7 @@ if (!console._sketch) {
   }
 
   var oldCountReset = console.countReset
-  console.countReset = function(label) {
+  console.countReset = function (label) {
     // log to the JS context
     oldCountReset && oldCountReset.apply(this, arguments)
 
@@ -64,7 +87,7 @@ if (!console._sketch) {
   console.debug = console.log
 
   var oldDir = console.dir
-  console.dir = function(obj, options) {
+  console.dir = function (obj, options) {
     // log to the JS context
     oldDir && oldDir.apply(this, arguments)
 
@@ -82,14 +105,14 @@ if (!console._sketch) {
   }
 
   var oldError = console.error
-  console.error = function() {
+  console.error = function () {
     // log to the JS context
-    oldDir && oldDir.apply(this, arguments)
+    oldError && oldError.apply(this, arguments)
     return logEverywhere('error', Array.from(arguments))
   }
 
   var oldGroup = console.group
-  console.group = function() {
+  console.group = function () {
     // log to the JS context
     oldGroup && oldGroup.apply(this, arguments)
 
@@ -104,7 +127,7 @@ if (!console._sketch) {
   console.groupCollapsed = console.group
 
   var oldGroupEnd = console.groupEnd
-  console.groupEnd = function() {
+  console.groupEnd = function () {
     // log to the JS context
     oldGroupEnd && oldGroupEnd.apply(this, arguments)
 
@@ -115,7 +138,7 @@ if (!console._sketch) {
   }
 
   var oldInfo = console.info
-  console.info = function() {
+  console.info = function () {
     // log to the JS context
     oldInfo && oldInfo.apply(this, arguments)
 
@@ -123,7 +146,7 @@ if (!console._sketch) {
   }
 
   var oldLog = console.log
-  console.log = function() {
+  console.log = function () {
     // log to the JS context
     oldLog && oldLog.apply(this, arguments)
 
@@ -133,7 +156,7 @@ if (!console._sketch) {
   var timers = {}
 
   var oldTime = console.time
-  console.time = function(label) {
+  console.time = function (label) {
     // log to the JS context
     oldTime && oldTime.apply(this, arguments)
 
@@ -147,7 +170,7 @@ if (!console._sketch) {
   }
 
   var oldTimeEnd = console.timeEnd
-  console.timeEnd = function(label) {
+  console.timeEnd = function (label) {
     // log to the JS context
     oldTimeEnd && oldTimeEnd.apply(this, arguments)
 
@@ -164,7 +187,7 @@ if (!console._sketch) {
   // console.trace = function() {}
 
   var oldWarn = console.warn
-  console.warn = function() {
+  console.warn = function () {
     // log to the JS context
     oldWarn && oldWarn.apply(this, arguments)
 
