@@ -1,26 +1,27 @@
-/* globals log */
+/* globals log, __command, NSThread, coscript, __mocha__ */
 
-var util = require('util')
+var util = require("util")
+var prepareValue = require("./prepare-value")
 
 var indentLevel = 0
-function indentString (string) {
-  var indent = ''
-  for (var i = 0; i < indentLevel; i++) {
-    indent += '  '
+function indentString(string) {
+  var indent = ""
+  for (var i = 0; i < indentLevel; i += 1) {
+    indent += "  "
   }
   if (indentLevel > 0) {
-    indent += '| '
+    indent += "| "
   }
 
-  return string.replace(/\n/g, indent + '\n')
+  return string.replace(/\n/g, indent + "\n")
 }
 
-function logEverywhere (level, payload) {
+function logEverywhere(level, payload) {
   var stringValue = util.format.apply(this, payload)
 
   log({
     stringValue: indentString(stringValue),
-    payload: payload,
+    payload: [prepareValue(payload)],
     level: level,
     command: __command
   })
@@ -28,22 +29,22 @@ function logEverywhere (level, payload) {
 
 if (!console._sketch) {
   var oldAssert = console.assert
-  console.assert = function (condition, text) {
+  console.assert = function assert(condition, text) {
     // log to the JS context
-    oldAssert && oldAssert.apply(this, arguments)
+    if (oldAssert) oldAssert.apply(this, arguments)
 
     if (!condition) {
-      return logEverywhere('assert', [text])
+      return logEverywhere("assert", [text])
     }
     return undefined
   }
 
   var oldClear = console.clear
-  console.clear = function () {
-    oldClear && oldClear.apply(this, arguments)
+  console.clear = function clear() {
+    if (oldClear) oldClear.apply(this, arguments)
 
     var threadDictionary = NSThread.mainThread().threadDictionary()
-    var panel = threadDictionary['skpm.debugger']
+    var panel = threadDictionary["skpm.debugger"]
     if (!panel) {
       return
     }
@@ -56,69 +57,73 @@ if (!console._sketch) {
     var fiber = coscript.createFiber()
     webview.evaluateJavaScript_completionHandler(
       'sketchBridge("{\\"name\\":\\"logs/CLEAR_LOGS\\"}");',
-      __mocha__.createBlock_function('v28@?0@8c16@"NSError"20', function (result, err) {
-        fiber.cleanup()
-      })
+      __mocha__.createBlock_function(
+        'v28@?0@8c16@"NSError"20',
+        // eslint-disable-next-line no-unused-vars
+        function cleanup(result, err) {
+          fiber.cleanup()
+        }
+      )
     )
   }
 
   var counts = {}
 
   var oldCount = console.count
-  console.count = function (label) {
+  console.count = function count(label) {
     // log to the JS context
-    oldCount && oldCount.apply(this, arguments)
+    if (oldCount) oldCount.apply(this, arguments)
 
-    label = typeof label !== 'undefined' ? label : 'default'
+    label = typeof label !== "undefined" ? label : "default"
     counts[label] = (counts[label] || 0) + 1
 
-    return logEverywhere('log', [label + ': ' + counts[label]])
+    return logEverywhere("log", [label + ": " + counts[label]])
   }
 
   var oldCountReset = console.countReset
-  console.countReset = function (label) {
+  console.countReset = function countReset(label) {
     // log to the JS context
-    oldCountReset && oldCountReset.apply(this, arguments)
+    if (oldCountReset) oldCountReset.apply(this, arguments)
 
-    label = typeof label !== 'undefined' ? label : 'default'
+    label = typeof label !== "undefined" ? label : "default"
     counts[label] = 0
   }
 
   console.debug = console.log
 
   var oldDir = console.dir
-  console.dir = function (obj, options) {
+  console.dir = function dir(obj, options) {
     // log to the JS context
-    oldDir && oldDir.apply(this, arguments)
+    if (oldDir) oldDir.apply(this, arguments)
 
     options = options || {}
     options.customInspect = false
-    return logEverywhere('log', util.inspect(obj, options))
+    return logEverywhere("log", util.inspect(obj, options))
   }
 
   var oldDirxml = console.dirxml
-  console.dirxml = function () {
+  console.dirxml = function dirxml() {
     // log to the JS context
-    oldDirxml && oldDirxml.apply(this, arguments)
+    if (oldDirxml) oldDirxml.apply(this, arguments)
 
-    return logEverywhere('log', Array.from(arguments))
+    return logEverywhere("log", Array.from(arguments))
   }
 
   var oldError = console.error
-  console.error = function () {
+  console.error = function error() {
     // log to the JS context
-    oldError && oldError.apply(this, arguments)
-    return logEverywhere('error', Array.from(arguments))
+    if (oldError) oldError.apply(this, arguments)
+    return logEverywhere("error", Array.from(arguments))
   }
 
   var oldGroup = console.group
-  console.group = function () {
+  console.group = function group() {
     // log to the JS context
-    oldGroup && oldGroup.apply(this, arguments)
+    if (oldGroup) oldGroup.apply(this, arguments)
 
     if (arguments.length) {
-      Array.from(arguments).forEach(function (label) {
-        logEverywhere('log', [label])
+      Array.from(arguments).forEach(function logItems(label) {
+        logEverywhere("log", [label])
       })
     }
     indentLevel += 1
@@ -127,9 +132,9 @@ if (!console._sketch) {
   console.groupCollapsed = console.group
 
   var oldGroupEnd = console.groupEnd
-  console.groupEnd = function () {
+  console.groupEnd = function groupEnd() {
     // log to the JS context
-    oldGroupEnd && oldGroupEnd.apply(this, arguments)
+    if (oldGroupEnd) oldGroupEnd.apply(this, arguments)
 
     indentLevel -= 1
     if (indentLevel < 0) {
@@ -138,65 +143,65 @@ if (!console._sketch) {
   }
 
   var oldInfo = console.info
-  console.info = function () {
+  console.info = function info() {
     // log to the JS context
-    oldInfo && oldInfo.apply(this, arguments)
+    if (oldInfo) oldInfo.apply(this, arguments)
 
-    return logEverywhere('info', Array.from(arguments))
+    return logEverywhere("info", Array.from(arguments))
   }
 
   var oldLog = console.log
-  console.log = function () {
+  console.log = function log() {
     // log to the JS context
-    oldLog && oldLog.apply(this, arguments)
+    if (oldLog) oldLog.apply(this, arguments)
 
-    return logEverywhere('log', Array.from(arguments))
+    return logEverywhere("log", Array.from(arguments))
   }
 
   var timers = {}
 
   var oldTime = console.time
-  console.time = function (label) {
+  console.time = function time(label) {
     // log to the JS context
-    oldTime && oldTime.apply(this, arguments)
+    if (oldTime) oldTime.apply(this, arguments)
 
-    label = typeof label !== 'undefined' ? label : 'default'
+    label = typeof label !== "undefined" ? label : "default"
     if (timers[label]) {
-      return logEverywhere('warn', ['Timer "' + label + '" already exists'])
+      return logEverywhere("warn", ['Timer "' + label + '" already exists'])
     }
 
     timers[label] = Date.now()
-    return
+    return undefined
   }
 
   var oldTimeEnd = console.timeEnd
-  console.timeEnd = function (label) {
+  console.timeEnd = function timeEnd(label) {
     // log to the JS context
-    oldTimeEnd && oldTimeEnd.apply(this, arguments)
+    if (oldTimeEnd) oldTimeEnd.apply(this, arguments)
 
-    label = typeof label !== 'undefined' ? label : 'default'
+    label = typeof label !== "undefined" ? label : "default"
     if (!timers[label]) {
-      return logEverywhere('warn', ['Timer "' + label + '" does not exist'])
+      return logEverywhere("warn", ['Timer "' + label + '" does not exist'])
     }
 
     var duration = Date.now() - timers[label]
     delete timers[label]
-    return logEverywhere('log', [label + ': ' + duration + 'ms'])
+    return logEverywhere("log", [label + ": " + duration + "ms"])
   }
 
   // console.trace = function() {}
 
   var oldWarn = console.warn
-  console.warn = function () {
+  console.warn = function warm() {
     // log to the JS context
-    oldWarn && oldWarn.apply(this, arguments)
+    if (oldWarn) oldWarn.apply(this, arguments)
 
-    return logEverywhere('warn', Array.from(arguments))
+    return logEverywhere("warn", Array.from(arguments))
   }
 
   console._sketch = true
 }
 
-module.exports = function () {
+module.exports = function createConsole() {
   return console
 }

@@ -1,13 +1,18 @@
 {
   "name": "@skpm/console",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "A console polyfill for sketch",
   "main": "index.js",
   "devDependencies": {
-    "standard": "^8.6.0"
+    "eslint": "^5.15.3",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "prettier": "^1.16.4"
   },
   "scripts": {
-    "test": "standard"
+    "test": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -24,5 +29,8 @@
     "url": "https://github.com/skpm/console/issues"
   },
   "homepage": "https://github.com/skpm/console#readme",
-  "dependencies": {}
+  "dependencies": {},
+  "prettier": {
+    "semi": false
+  }
 }

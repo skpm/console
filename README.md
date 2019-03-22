@@ -7,13 +7,15 @@ It is allow to log in both the JavaScript context and the Sketch channel, ie. it
 ## Installation
 
 ```bash
-npm i -S sketch-polyfill-console
+npm i -S @skpm/console
 ```
 
 ## Usage
 
 ```js
-import console from 'sketch-polyfill-console'
+import Console from "@skpm/console"
 
-console.log('hello world')
+const console = Console()
+
+console.log("hello world")
 ```
