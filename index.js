@@ -1,4 +1,4 @@
-/* globals log, __command, NSThread, coscript, __mocha__ */
+/* globals log, __command, NSThread */
 
 var util = require("util")
 var prepareValue = require("./prepare-value")
@@ -54,16 +54,9 @@ if (!console._sketch) {
       return
     }
 
-    var fiber = coscript.createFiber()
     webview.evaluateJavaScript_completionHandler(
-      'sketchBridge("{\\"name\\":\\"logs/CLEAR_LOGS\\"}");',
-      __mocha__.createBlock_function(
-        'v28@?0@8c16@"NSError"20',
-        // eslint-disable-next-line no-unused-vars
-        function cleanup(result, err) {
-          fiber.cleanup()
-        }
-      )
+      'sketchBridge({"name":"logs/CLEAR_LOGS"});',
+      null
     )
   }
 
