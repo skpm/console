@@ -50,7 +50,7 @@ if (!console._sketch) {
     }
 
     var webview = panel.contentView().subviews()[0]
-    if (webview || !webview.evaluateJavaScript_completionHandler) {
+    if (!webview || !webview.evaluateJavaScript_completionHandler) {
       return
     }
 
