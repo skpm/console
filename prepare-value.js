@@ -11,6 +11,9 @@ function prepareArray(array, options) {
 }
 
 function prepareObject(object, options) {
+  if (!object) {
+    return {}
+  }
   const deep = {}
   Object.keys(object).forEach(function prepareItem(key) {
     deep[key] = prepareValue(object[key], options) // eslint-disable-line no-use-before-define
@@ -68,7 +71,7 @@ function prepareValue(value, options) {
       message: value.message,
       name: value.name,
       stack: value.stack,
-      nativeException: prepareObject(value.nativeException, options)
+      nativeException: prepareValue(value.nativeException, options)
     }
   } else if (util.isObject(value)) {
     var nativeClass = getNativeClass(value)
