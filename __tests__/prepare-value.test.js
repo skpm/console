@@ -39,3 +39,13 @@ test("should prepare an Array", () => {
     primitive: "Array"
   })
 })
+
+test("should prepare circular objects", () => {
+  const arr = []
+  arr[0] = arr
+  expect(prepareValue(arr)).toEqual({
+    value: [{ value: [], type: "Circular", primitive: "Array" }],
+    type: "Array",
+    primitive: "Array"
+  })
+})

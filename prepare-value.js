@@ -1,8 +1,4 @@
 var util = require("util")
-// var prepareStackTrace = require("./prepare-stack-trace")
-
-var getNativeClass = util.getNativeClass
-var isNativeObject = util.isNativeObject
 
 function prepareArray(array, options) {
   return array.map(function prepareItem(i) {
@@ -22,14 +18,26 @@ function prepareObject(object, options) {
 }
 
 function prepareValue(value, options) {
+  if (!options) {
+    options = {}
+  }
+  if (!options.seen) {
+    options.seen = []
+  }
   var type
   var primitive
   if (util.isArray(value)) {
-    type = Array.isArray(value) ? "Array" : String(value.class())
+    type = Array.isArray(value) ? "Array" : util.getNativeClass(value)
     primitive = "Array"
-    value = prepareArray(util.toArray(value), options)
+    if (options.seen.indexOf(value) !== -1) {
+      type = "Circular"
+      value = []
+    } else {
+      options.seen.push(value)
+      value = prepareArray(util.toArray(value), options)
+    }
   } else if (util.isBoolean(value)) {
-    type = typeof value === "boolean" ? "Boolean" : String(value.class())
+    type = typeof value === "boolean" ? "Boolean" : util.getNativeClass(value)
     primitive = "Boolean"
     value = Boolean(Number(value))
   } else if (util.isNullOrUndefined(value) || Number.isNaN(value)) {
@@ -37,11 +45,11 @@ function prepareValue(value, options) {
     primitive = "Empty"
     value = String(value)
   } else if (util.isNumber(value)) {
-    type = typeof value === "number" ? "Number" : String(value.class())
+    type = typeof value === "number" ? "Number" : util.getNativeClass(value)
     primitive = "Number"
     value = Number(value)
   } else if (util.isString(value)) {
-    type = typeof value === "string" ? "String" : String(value.class())
+    type = typeof value === "string" ? "String" : util.getNativeClass(value)
     primitive = "String"
     value = String(value)
   } else if (util.isSymbol(value)) {
@@ -57,9 +65,10 @@ function prepareValue(value, options) {
     primitive = "Date"
     value = util.inspect(value)
   } else if (util.isFunction(value)) {
-    type = typeof value === "function" ? "Function" : String(value.class())
+    type = typeof value === "function" ? "Function" : util.getNativeClass(value)
     primitive = "Function"
-    value = typeof value === "function" ? "[Function]" : String(value.class())
+    value =
+      typeof value === "function" ? "[Function]" : util.getNativeClass(value)
   } else if (util.isBuffer(value)) {
     type = "Buffer"
     primitive = "Buffer"
@@ -74,12 +83,18 @@ function prepareValue(value, options) {
       nativeException: prepareValue(value.nativeException, options)
     }
   } else if (util.isObject(value)) {
-    var nativeClass = getNativeClass(value)
+    var nativeClass = util.getNativeClass(value)
     type = nativeClass || "Object"
     primitive = "Object"
-    value = prepareObject(util.toObject(value), options)
-  } else if (isNativeObject(value)) {
-    type = getNativeClass(value)
+    if (options.seen.indexOf(value) !== -1) {
+      type = "Circular"
+      value = {}
+    } else {
+      options.seen.push(value)
+      value = prepareObject(util.toObject(value), options)
+    }
+  } else if (util.isNativeObject(value)) {
+    type = util.getNativeClass(value)
     // special case for NSException
     if (type === "NSException") {
       primitive = "Error"
