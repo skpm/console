@@ -49,3 +49,34 @@ test("should prepare circular objects", () => {
     primitive: "Array"
   })
 })
+
+test("should prepare a wrapped object", (context, document) => {
+  document.sketchObject.objectID = 'test'
+  document.pages[0].sketchObject.objectID = 'test-page'
+  expect(prepareValue(document)).toEqual(
+  { value:
+      { type: { value: 'Document', type: 'String', primitive: 'String' },
+        id: { value: 'test', type: 'String', primitive: 'String' },
+        pages: { value: [{ value:
+          { type: { value: 'Page', type: 'String', primitive: 'String' },
+            id: { value: 'test-page', type: 'String', primitive: 'String' },
+            frame: { value:
+              { x: { value: 0, type: 'Number', primitive: 'Number' },
+                y: { value: 0, type: 'Number', primitive: 'Number' },
+                width: { value: 0, type: 'Number', primitive: 'Number' },
+                height: { value: 0, type: 'Number', primitive: 'Number' } }
+                , type: 'Object', primitive: 'Object' },
+            name: { value: 'Page 1', type: 'String', primitive: 'String' },
+            selected: { value: true, type: 'Boolean', primitive: 'Boolean' },
+            sharedStyleId: { value: 'null', type: 'Empty', primitive: 'Empty' },
+            layers: { value: [], type: 'Array', primitive: 'Array' } },
+          type: 'Object',
+          primitive: 'Object' }], type: 'Array', primitive: 'Array' },
+        colors: { value: [], type: 'Array', primitive: 'Array' },
+        gradients: { value: [], type: 'Array', primitive: 'Array' },
+        sharedLayerStyles: { value: [], type: 'Array', primitive: 'Array' },
+        sharedTextStyles: { value: [], type: 'Array', primitive: 'Array' } },
+    type: 'Document',
+    primitive: 'Object' }
+  )
+})

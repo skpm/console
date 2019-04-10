@@ -89,6 +89,10 @@ function prepareValue(value, options) {
     if (options.seen.indexOf(value) !== -1) {
       type = "Circular"
       value = {}
+    } else if (value._isWrappedObject) {
+      options.seen.push(value)
+      type = value.type
+      value = prepareObject(value.toJSON(), options)
     } else {
       options.seen.push(value)
       value = prepareObject(util.toObject(value), options)
