@@ -80,3 +80,8 @@ test("should prepare a wrapped object", (context, document) => {
     primitive: 'Object' }
   )
 })
+
+test("should prepare an error", () => {
+  const err = new Error('this is an error')
+  expect(prepareValue(err).type).toEqual('Error')
+})
