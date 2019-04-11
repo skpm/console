@@ -70,7 +70,7 @@ test("should prepare a wrapped object", (context, document) => {
             selected: { value: true, type: 'Boolean', primitive: 'Boolean' },
             sharedStyleId: { value: 'null', type: 'Empty', primitive: 'Empty' },
             layers: { value: [], type: 'Array', primitive: 'Array' } },
-          type: 'Object',
+          type: 'Page',
           primitive: 'Object' }], type: 'Array', primitive: 'Array' },
         colors: { value: [], type: 'Array', primitive: 'Array' },
         gradients: { value: [], type: 'Array', primitive: 'Array' },

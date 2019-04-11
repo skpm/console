@@ -92,7 +92,21 @@ function prepareValue(value, options) {
     } else if (value._isWrappedObject) {
       options.seen.push(value)
       type = value.type
-      value = prepareObject(value.toJSON(), options)
+      const propertyList = value.constructor._DefinedPropertiesKey
+      const json = {}
+      Object.keys(propertyList).forEach(function customToJSON(k) {
+        if (!propertyList[k].exportable) {
+          return
+        }
+        if (typeof value[k] === 'undefined') {
+          return
+        }
+        json[k] = value[k]
+        if (json[k] && !json[k]._isWrappedObject && json[k].toJSON) {
+          json[k] = json[k].toJSON()
+        }
+      })
+      value = prepareObject(json, options)
     } else {
       options.seen.push(value)
       value = prepareObject(util.toObject(value), options)
