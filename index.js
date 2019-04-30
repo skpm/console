@@ -16,8 +16,8 @@ function indentString(string) {
   return string.replace(/\n/g, indent + "\n")
 }
 
-function logEverywhere(level, payload) {
-  var stringValue = util.format.apply(this, payload)
+function logEverywhere(level, payload, skipFormat) {
+  var stringValue = skipFormat ? payload : util.format.apply(this, payload)
 
   log({
     stringValue: indentString(stringValue),
@@ -70,7 +70,7 @@ if (!console._sketch) {
     label = typeof label !== "undefined" ? label : "default"
     counts[label] = (counts[label] || 0) + 1
 
-    return logEverywhere("log", [label + ": " + counts[label]])
+    return logEverywhere("log", label + ": " + counts[label], true)
   }
 
   var oldCountReset = console.countReset
@@ -91,7 +91,7 @@ if (!console._sketch) {
 
     options = options || {}
     options.customInspect = false
-    return logEverywhere("log", util.inspect(obj, options))
+    return logEverywhere("log", util.inspect(obj, options), true)
   }
 
   var oldDirxml = console.dirxml
@@ -160,7 +160,7 @@ if (!console._sketch) {
 
     label = typeof label !== "undefined" ? label : "default"
     if (timers[label]) {
-      return logEverywhere("warn", ['Timer "' + label + '" already exists'])
+      return logEverywhere("warn", 'Timer "' + label + '" already exists', true)
     }
 
     timers[label] = Date.now()
@@ -174,7 +174,7 @@ if (!console._sketch) {
 
     label = typeof label !== "undefined" ? label : "default"
     if (!timers[label]) {
-      return logEverywhere("warn", ['Timer "' + label + '" does not exist'])
+      return logEverywhere("warn", 'Timer "' + label + '" does not exist', true)
     }
 
     var duration = Date.now() - timers[label]
