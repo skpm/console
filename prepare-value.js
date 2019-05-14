@@ -52,6 +52,10 @@ function prepareValue(value, options) {
     type = typeof value === "string" ? "String" : util.getNativeClass(value)
     primitive = "String"
     value = String(value)
+  } else if (util.getNativeClass(value) === 'MOStruct') {
+    type = 'MOStruct'
+    primitive = "Object"
+    value = prepareObject(util.toObject(value), options)
   } else if (util.isSymbol(value)) {
     type = "Symbol"
     primitive = "Symbol"

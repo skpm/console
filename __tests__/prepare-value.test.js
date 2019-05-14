@@ -1,4 +1,4 @@
-/* globals test, expect */
+/* globals test, expect, NSMakeRange */
 const prepareValue = require("../prepare-value")
 
 test("should prepare an Error", () => {
@@ -84,4 +84,13 @@ test("should prepare a wrapped object", (context, document) => {
 test("should prepare an error", () => {
   const err = new Error('this is an error')
   expect(prepareValue(err).type).toEqual('Error')
+})
+
+test("should prepare an NSRange", () => {
+  const range = NSMakeRange(0,5)
+  expect(prepareValue(range)).toEqual({ value:
+    { location: { value: 0, type: '__NSCFNumber', primitive: 'Number' },
+      length: { value: 5, type: '__NSCFNumber', primitive: 'Number' } },
+    type: 'MOStruct',
+    primitive: 'Object' })
 })
