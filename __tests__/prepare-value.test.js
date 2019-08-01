@@ -51,46 +51,68 @@ test("should prepare circular objects", () => {
 })
 
 test("should prepare a wrapped object", (context, document) => {
-  document.sketchObject.objectID = 'test'
-  document.pages[0].sketchObject.objectID = 'test-page'
-  expect(prepareValue(document)).toEqual(
-  { value:
-      { type: { value: 'Document', type: 'String', primitive: 'String' },
-        id: { value: 'test', type: 'String', primitive: 'String' },
-        pages: { value: [{ value:
-          { type: { value: 'Page', type: 'String', primitive: 'String' },
-            id: { value: 'test-page', type: 'String', primitive: 'String' },
-            frame: { value:
-              { x: { value: 0, type: 'Number', primitive: 'Number' },
-                y: { value: 0, type: 'Number', primitive: 'Number' },
-                width: { value: 0, type: 'Number', primitive: 'Number' },
-                height: { value: 0, type: 'Number', primitive: 'Number' } }
-                , type: 'Object', primitive: 'Object' },
-            name: { value: 'Page 1', type: 'String', primitive: 'String' },
-            selected: { value: true, type: 'Boolean', primitive: 'Boolean' },
-            sharedStyleId: { value: 'null', type: 'Empty', primitive: 'Empty' },
-            layers: { value: [], type: 'Array', primitive: 'Array' } },
-          type: 'Page',
-          primitive: 'Object' }], type: 'Array', primitive: 'Array' },
-        colors: { value: [], type: 'Array', primitive: 'Array' },
-        gradients: { value: [], type: 'Array', primitive: 'Array' },
-        sharedLayerStyles: { value: [], type: 'Array', primitive: 'Array' },
-        sharedTextStyles: { value: [], type: 'Array', primitive: 'Array' } },
-    type: 'Document',
-    primitive: 'Object' }
-  )
+  document.sketchObject.objectID = "test"
+  document.pages[0].sketchObject.objectID = "test-page"
+  expect(prepareValue(document)).toEqual({
+    value: {
+      type: { value: "Document", type: "String", primitive: "String" },
+      id: { value: "test", type: "String", primitive: "String" },
+      colorSpace: { value: "Unmanaged", type: "String", primitive: "String" },
+      pages: {
+        value: [
+          {
+            value: {
+              type: { value: "Page", type: "String", primitive: "String" },
+              id: { value: "test-page", type: "String", primitive: "String" },
+              frame: {
+                value: {
+                  x: { value: 0, type: "Number", primitive: "Number" },
+                  y: { value: 0, type: "Number", primitive: "Number" },
+                  width: { value: 0, type: "Number", primitive: "Number" },
+                  height: { value: 0, type: "Number", primitive: "Number" }
+                },
+                type: "Object",
+                primitive: "Object"
+              },
+              name: { value: "Page 1", type: "String", primitive: "String" },
+              selected: { value: true, type: "Boolean", primitive: "Boolean" },
+              sharedStyleId: {
+                value: "null",
+                type: "Empty",
+                primitive: "Empty"
+              },
+              layers: { value: [], type: "Array", primitive: "Array" }
+            },
+            type: "Page",
+            primitive: "Object"
+          }
+        ],
+        type: "Array",
+        primitive: "Array"
+      },
+      colors: { value: [], type: "Array", primitive: "Array" },
+      gradients: { value: [], type: "Array", primitive: "Array" },
+      sharedLayerStyles: { value: [], type: "Array", primitive: "Array" },
+      sharedTextStyles: { value: [], type: "Array", primitive: "Array" }
+    },
+    type: "Document",
+    primitive: "Object"
+  })
 })
 
 test("should prepare an error", () => {
-  const err = new Error('this is an error')
-  expect(prepareValue(err).type).toEqual('Error')
+  const err = new Error("this is an error")
+  expect(prepareValue(err).type).toEqual("Error")
 })
 
 test("should prepare an NSRange", () => {
-  const range = NSMakeRange(0,5)
-  expect(prepareValue(range)).toEqual({ value:
-    { location: { value: 0, type: '__NSCFNumber', primitive: 'Number' },
-      length: { value: 5, type: '__NSCFNumber', primitive: 'Number' } },
-    type: 'MOStruct',
-    primitive: 'Object' })
+  const range = NSMakeRange(0, 5)
+  expect(prepareValue(range)).toEqual({
+    value: {
+      location: { value: 0, type: "__NSCFNumber", primitive: "Number" },
+      length: { value: 5, type: "__NSCFNumber", primitive: "Number" }
+    },
+    type: "MOStruct",
+    primitive: "Object"
+  })
 })
