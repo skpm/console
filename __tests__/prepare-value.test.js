@@ -74,7 +74,7 @@ test("should prepare a wrapped object", (context, document) => {
                 type: "Object",
                 primitive: "Object"
               },
-              name: { value: "Page 1", type: "String", primitive: "String" },
+              name: { value: "Page", type: "String", primitive: "String" },
               selected: { value: true, type: "Boolean", primitive: "Boolean" },
               sharedStyleId: {
                 value: "null",
