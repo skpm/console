@@ -131,7 +131,7 @@ function prepareValue(value, options) {
         stack: stack,
         userInfo: prepareObject(util.toObject(userInfo), options)
       }
-    } else if (value.class().mocha) {
+    } else if (value.class && value.class() && value.class().mocha) {
       primitive = "Mocha"
       value = type
     } else {
